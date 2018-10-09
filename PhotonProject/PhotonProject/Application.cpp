@@ -12,6 +12,12 @@ Application::~Application()
 
 }
 
+void Application::SetMousePos(float x, float y)
+{
+	xMousePos = x;
+	yMousePos = y;
+}
+
 GameObject* Application::Spawn()
 {
 	return Spawn(new GameObject());
@@ -63,6 +69,9 @@ Application & Application::Instance()
 void Application::Start()
 {
 	std::cout << "APPLICATION STARTED" << std::endl;
+
+	GO = Spawn(Vector2(0.0f, 0.0f), 0.0f, Vector2(1.0f, 1.0f));
+	GO->GetSprite().SetFilePath("../media/NomadAvatar.bmp");
 }
 
 void Application::Update(float deltaTime)
@@ -75,7 +84,7 @@ void Application::Update(float deltaTime)
 	m_transform1.position =
 		Vector2
 		(
-			100.0f * (sin(time * 3.0f) + 1.0f), 100.0f * (cos(time * 3.0f) + 1.0f)
+			xMousePos, yMousePos
 		);
 	FindGameObject(0).SetTransform(m_transform1);
 }

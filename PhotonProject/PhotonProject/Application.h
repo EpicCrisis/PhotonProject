@@ -14,12 +14,15 @@ private:
 	GameObjectContainer<GameObject> m_GOs;
 	std::list<GameObject*>::iterator iteGO;
 
+	float xMousePos;
+	float yMousePos;
+
 public:
 	~Application();
 
 	GameObject* GO;
 
-	Sprite* m_sprite0;
+	void SetMousePos(float x, float y);
 
 	// overload spawn gameobject function
 	GameObject* Spawn();

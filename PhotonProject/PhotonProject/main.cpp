@@ -60,6 +60,7 @@ static void cursor_position_callback(GLFWwindow* window, double xPos, double yPo
 	if (network != NULL)
 	{
 		int myID = 4201;
+		Application::Instance().SetMousePos(xPos, yPos);
 		network->sendEvent(myID, xPos, yPos);
 	}
 }
