@@ -19,11 +19,29 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="MyPhoton.cpp" />
+    <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Vector2.cpp" />
+    <ClCompile Include="Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="Bitmap.h" />
+    <ClInclude Include="Color.h" />
+    <ClInclude Include="EnumBlend.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameObjectContainer.h" />
+    <ClInclude Include="Matrix.h" />
     <ClInclude Include="MyPhoton.h" />
+    <ClInclude Include="Sprite.h" />
+    <ClInclude Include="TemplateList.h" />
+    <ClInclude Include="Transform2D.h" />
+    <ClInclude Include="Vector.h" />
+    <ClInclude Include="Vector2.h" />
+    <ClInclude Include="Vector3.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -79,8 +97,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\Photon-Windows-Sdk_v4-1-5-1;$(SolutionDir)\Photon-Windows-Sdk_v4-1-5-1\Photon-cpp\inc;$(SolutionDir)\Photon-Windows-Sdk_v4-1-5-1\Common-cpp\inc;$(SolutionDir)\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\Photon-Windows-Sdk_v4-1-5-1\Photon-cpp\lib;$(SolutionDir)\Photon-Windows-Sdk_v4-1-5-1\LoadBalancing-cpp\lib;$(SolutionDir)\Photon-Windows-Sdk_v4-1-5-1\Common-cpp\lib;$(SolutionDir)\Libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Photon-Windows-Sdk_v4-1-5-1;$(SolutionDir)Photon-Windows-Sdk_v4-1-5-1\Photon-cpp\inc;$(SolutionDir)Photon-Windows-Sdk_v4-1-5-1\Common-cpp\inc;$(SolutionDir)Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Photon-Windows-Sdk_v4-1-5-1\Photon-cpp\lib;$(SolutionDir)Photon-Windows-Sdk_v4-1-5-1\LoadBalancing-cpp\lib;$(SolutionDir)Photon-Windows-Sdk_v4-1-5-1\Common-cpp\lib;$(SolutionDir)Libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
