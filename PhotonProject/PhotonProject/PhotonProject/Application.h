@@ -2,9 +2,9 @@
 #pragma once
 
 #include <GLFW/glfw3.h>
+#include "MyPhoton.h"
 #include "GameObject.h"
 #include "GameObjectContainer.h"
-#include "MyPhoton.h"
 
 class Application
 {
@@ -14,8 +14,7 @@ private:
 	GameObjectContainer<GameObject> m_GOs;
 	std::list<GameObject*>::iterator iteGO;
 
-	float xMousePos = 0.0f;
-	float yMousePos = 0.0f;
+	float mousePos[2];
 
 	int playerTurn;
 
@@ -24,7 +23,7 @@ public:
 
 	GameObject* GO;
 
-	MyPhoton* photon = new MyPhoton;
+	MyPhoton* network;
 
 	void SetMousePos(float x, float y);
 

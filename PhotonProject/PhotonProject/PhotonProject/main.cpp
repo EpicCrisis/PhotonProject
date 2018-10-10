@@ -10,8 +10,6 @@
 const int RESOLUTION_X = 800;
 const int RESOLUTION_Y = 600;
 
-MyPhoton* network = NULL;
-
 void OnWindowResized(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
@@ -57,11 +55,11 @@ void UpdateGame(float deltaTime)
 
 static void cursor_position_callback(GLFWwindow* window, double xPos, double yPos)
 {
-	if (network != NULL)
+	if (Application::Instance().network != NULL)
 	{
 		int myID = 4201;
 		Application::Instance().SetMousePos(xPos, yPos - RESOLUTION_Y);
-		network->sendEvent(myID, xPos, yPos);
+		Application::Instance().network->sendEvent(myID, xPos, yPos - RESOLUTION_Y);
 	}
 }
 
@@ -101,12 +99,8 @@ int main(void)
 	// Run application start.
 	Application::Instance().Start();
 
-	network = new MyPhoton();
-	network->connect();
 	while (!glfwWindowShouldClose(window))
 	{
-		network->run();
-
 		// Render here,
 		glClear(GL_COLOR_BUFFER_BIT);
 

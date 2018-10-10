@@ -14,8 +14,8 @@ Application::~Application()
 
 void Application::SetMousePos(float x, float y)
 {
-	xMousePos = x;
-	yMousePos = -y; // Display start position and mouse start position is inverse.
+	mousePos[0] = x;
+	mousePos[1] = -y; // Display start position and mouse start position is inverse.
 }
 
 GameObject* Application::Spawn()
@@ -68,7 +68,11 @@ Application & Application::Instance()
 
 void Application::Start()
 {
-	std::cout << "APPLICATION STARTED" << std::endl;
+	std::cout << "APPLICATION STARTED" << std::endl; 
+	
+	network = new MyPhoton();
+
+	network->connect();
 
 	GO = Spawn(Vector2(0.0f, 0.0f), 0.0f, Vector2(1.0f, 1.0f));
 	GO->GetSprite().SetFilePath("../media/NomadAvatar.bmp");
@@ -81,13 +85,15 @@ void Application::Update(float deltaTime)
 {
 	time += deltaTime;
 
+	network->run();
+
 	// Set this to follow the mouse position
 	Transform2D m_transform0;
 	m_transform0 = FindGameObject(0).GetTransform();
 	m_transform0.position =
 		Vector2
 		(
-			xMousePos, yMousePos
+			mousePos[0], mousePos[1]
 		);
 	FindGameObject(0).SetTransform(m_transform0);
 
@@ -97,7 +103,7 @@ void Application::Update(float deltaTime)
 	m_transform1.position =
 		Vector2
 		(
-			photon->receivePositionX(), photon->receivePositionY()
+			network->data[1], network->data[2]
 		);
 	FindGameObject(1).SetTransform(m_transform1);
 }

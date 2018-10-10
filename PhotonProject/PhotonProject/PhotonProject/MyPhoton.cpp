@@ -3,7 +3,7 @@
 #include <iostream>
 #include "Application.h"
 
-static const ExitGames::Common::JString appId = L"5496d028-b4b2-4a62-a8d2-e546e1bc6879"; // set your app id here
+static const ExitGames::Common::JString appId = L"af3dea0c-4afb-4ea8-ad5a-fb120473ceff"; // set your app id here
 static const ExitGames::Common::JString appVersion = L"1.0";
 static const ExitGames::Common::JString PLAYER_NAME = L"Windows";
 
@@ -54,22 +54,11 @@ void MyPhoton::run(void)
 
 void MyPhoton::sendEvent(float myID, float x, float y)
 {
-	float data[3];
 	data[0] = myID;
 	data[1] = x;
 	data[2] = y;
 
 	mLoadBalancingClient.opRaiseEvent(true, data, 3, 1);
-}
-
-float MyPhoton::receivePositionX()
-{
-	return posX;
-}
-
-float MyPhoton::receivePositionY()
-{
-	return posY;
 }
 
 // protocol implementations
@@ -119,8 +108,6 @@ void MyPhoton::customEventAction(int playerNr, nByte eventCode, const ExitGames:
 	if (data)
 	{
 		std::cout << data[0] << ", " << data[1] << ", " << data[2] << std::endl;
-		posX = data[1];
-		posY = data[2];
 	}
 	else 
 	{
