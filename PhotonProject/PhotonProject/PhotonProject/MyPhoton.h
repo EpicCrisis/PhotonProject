@@ -16,7 +16,14 @@ public:
 	void disconnect(void);
 	void sendEvent(float myID, float x, float y);
 
+	float receivePositionX();
+	float receivePositionY();
+
 private:
+
+	float posX = 0.0f;
+	float posY = 0.0f;
+
 	// receive and print out debug out here
 	virtual void debugReturn(int debugLevel, const ExitGames::Common::JString& string);
 

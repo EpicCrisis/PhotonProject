@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include "GameObject.h"
 #include "GameObjectContainer.h"
+#include "MyPhoton.h"
 
 class Application
 {
@@ -16,10 +17,14 @@ private:
 	float xMousePos = 0.0f;
 	float yMousePos = 0.0f;
 
+	int playerTurn;
+
 public:
 	~Application();
 
 	GameObject* GO;
+
+	MyPhoton* photon = new MyPhoton;
 
 	void SetMousePos(float x, float y);
 

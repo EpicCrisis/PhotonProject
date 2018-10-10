@@ -1,6 +1,7 @@
 
 #include "MyPhoton.h"
 #include <iostream>
+#include "Application.h"
 
 static const ExitGames::Common::JString appId = L"5496d028-b4b2-4a62-a8d2-e546e1bc6879"; // set your app id here
 static const ExitGames::Common::JString appVersion = L"1.0";
@@ -61,6 +62,16 @@ void MyPhoton::sendEvent(float myID, float x, float y)
 	mLoadBalancingClient.opRaiseEvent(true, data, 3, 1);
 }
 
+float MyPhoton::receivePositionX()
+{
+	return posX;
+}
+
+float MyPhoton::receivePositionY()
+{
+	return posY;
+}
+
 // protocol implementations
 
 void MyPhoton::debugReturn(int debugLevel, const ExitGames::Common::JString& string)
@@ -69,34 +80,34 @@ void MyPhoton::debugReturn(int debugLevel, const ExitGames::Common::JString& str
 
 void MyPhoton::connectionErrorReturn(int errorCode)
 {
-	std::wcout<<"connectionErrorReturn : "<<errorCode<<std::endl;
+	std::wcout << "connectionErrorReturn : " << errorCode << std::endl;
 }
 
 void MyPhoton::clientErrorReturn(int errorCode)
 {
-	std::wcout<<"clientErrorReturn : "<<errorCode<<std::endl;
+	std::wcout << "clientErrorReturn : " << errorCode << std::endl;
 }
 
 void MyPhoton::warningReturn(int warningCode)
 {
-	std::wcout<<"warningReturn : "<<warningCode<<std::endl;
+	std::wcout << "warningReturn : " << warningCode << std::endl;
 }
 
 void MyPhoton::serverErrorReturn(int errorCode)
 {
-	std::wcout<<"serverErrorReturn : "<<errorCode<<std::endl;
+	std::wcout << "serverErrorReturn : " << errorCode << std::endl;
 }
 
-void MyPhoton::joinRoomEventAction(int playerNr, const ExitGames::Common::JVector<int>& playernrs, 
+void MyPhoton::joinRoomEventAction(int playerNr, const ExitGames::Common::JVector<int>& playernrs,
 	const ExitGames::LoadBalancing::Player& player)
 {
-	std::wcout<<"joinRoomEventAction"<<std::endl;
+	std::wcout << "joinRoomEventAction" << std::endl;
 	//sendEvent();
 }
 
 void MyPhoton::leaveRoomEventAction(int playerNr, bool isInactive)
 {
-	std::wcout<<"leaveRoomEventAction"<<std::endl;
+	std::wcout << "leaveRoomEventAction" << std::endl;
 }
 
 void MyPhoton::customEventAction(int playerNr, nByte eventCode, const ExitGames::Common::Object& eventContent)
@@ -108,6 +119,8 @@ void MyPhoton::customEventAction(int playerNr, nByte eventCode, const ExitGames:
 	if (data)
 	{
 		std::cout << data[0] << ", " << data[1] << ", " << data[2] << std::endl;
+		posX = data[1];
+		posY = data[2];
 	}
 	else 
 	{
@@ -123,37 +136,37 @@ void MyPhoton::connectReturn(int errorCode, const ExitGames::Common::JString& er
 	}
 	else
 	{
-		std::wcout<<"Connected to Photon Server."<<std::endl;
-		
-		std::wcout<<"Trying to join a random room..."<<std::endl;
+		std::wcout << "Connected to Photon Server." << std::endl;
+
+		std::wcout << "Trying to join a random room..." << std::endl;
 		mLoadBalancingClient.opJoinRandomRoom();
 	}
 }
 
 void MyPhoton::disconnectReturn(void)
 {
-	std::wcout<<"disconnected"<<std::endl;
+	std::wcout << "disconnected" << std::endl;
 }
 
-void MyPhoton::createRoomReturn(int localPlayerNr, const ExitGames::Common::Hashtable& 
-	/*gameProperties*/, const ExitGames::Common::Hashtable& 
+void MyPhoton::createRoomReturn(int localPlayerNr, const ExitGames::Common::Hashtable&
+	/*gameProperties*/, const ExitGames::Common::Hashtable&
 	/*playerProperties*/, int errorCode, const ExitGames::Common::JString& errorString)
 {
-	std::wcout<<"createRoomReturn"<<std::endl;
+	std::wcout << "createRoomReturn" << std::endl;
 }
 
-void MyPhoton::joinOrCreateRoomReturn(int localPlayerNr, const ExitGames::Common::Hashtable& 
-	/*gameProperties*/, const ExitGames::Common::Hashtable& 
+void MyPhoton::joinOrCreateRoomReturn(int localPlayerNr, const ExitGames::Common::Hashtable&
+	/*gameProperties*/, const ExitGames::Common::Hashtable&
 	/*playerProperties*/, int errorCode, const ExitGames::Common::JString& errorString)
 {
-	std::wcout<<"joinOrCreateRoomReturn"<<std::endl;
+	std::wcout << "joinOrCreateRoomReturn" << std::endl;
 }
 
-void MyPhoton::joinRoomReturn(int localPlayerNr, const ExitGames::Common::Hashtable& 
-	/*gameProperties*/, const ExitGames::Common::Hashtable& 
+void MyPhoton::joinRoomReturn(int localPlayerNr, const ExitGames::Common::Hashtable&
+	/*gameProperties*/, const ExitGames::Common::Hashtable&
 	/*playerProperties*/, int errorCode, const ExitGames::Common::JString& errorString)
 {
-	std::wcout<<"joinRoomReturn"<<std::endl;
+	std::wcout << "joinRoomReturn" << std::endl;
 }
 
 void MyPhoton::joinRandomRoomReturn(int localPlayerNr, const ExitGames::Common::Hashtable& 
@@ -182,35 +195,35 @@ void MyPhoton::joinRandomRoomReturn(int localPlayerNr, const ExitGames::Common::
 
 void MyPhoton::leaveRoomReturn(int errorCode, const ExitGames::Common::JString& errorString)
 {
-	std::wcout<<"leaveRoomReturn"<<std::endl;
+	std::wcout << "leaveRoomReturn" << std::endl;
 }
 
 void MyPhoton::joinLobbyReturn(void)
 {
-	std::wcout<<"joinLobbyReturn"<<std::endl;
+	std::wcout << "joinLobbyReturn" << std::endl;
 }
 
 void MyPhoton::leaveLobbyReturn(void)
 {
-	std::wcout<<"leaveLobbyReturn"<<std::endl;
+	std::wcout << "leaveLobbyReturn" << std::endl;
 }
 
 void MyPhoton::onLobbyStatsResponse(const ExitGames::Common::JVector<ExitGames::LoadBalancing::LobbyStatsResponse>& lobbyStats)
 {
-	std::wcout<<"onLobbyStatsResponse"<<std::endl;
+	std::wcout << "onLobbyStatsResponse" << std::endl;
 }
 
 void MyPhoton::onLobbyStatsUpdate(const ExitGames::Common::JVector<ExitGames::LoadBalancing::LobbyStatsResponse>& lobbyStats)
 {
-	std::wcout<<"onLobbyStatsUpdate"<<std::endl;
+	std::wcout << "onLobbyStatsUpdate" << std::endl;
 }
 
-void MyPhoton::onAvailableRegions(const ExitGames::Common::JVector<ExitGames::Common::JString>& availableRegions, 
+void MyPhoton::onAvailableRegions(const ExitGames::Common::JVector<ExitGames::Common::JString>& availableRegions,
 	const ExitGames::Common::JVector<ExitGames::Common::JString>& availableRegionServers)
 {
 	//EGLOG(ExitGames::Common::DebugLevel::INFO, L"%ls / %ls", availableRegions.toString().cstr(), availableRegionServers.toString().cstr());
 	//mpOutputListener->writeLine(L"onAvailableRegions: " + availableRegions.toString() + L" / " + availableRegionServers.toString());
-	
+
 	// select first region from list
 	//mpOutputListener->writeLine(L"selecting region: " + availableRegions[0]);
 	mLoadBalancingClient.selectRegion(availableRegions[0]);

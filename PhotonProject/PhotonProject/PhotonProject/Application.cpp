@@ -72,21 +72,34 @@ void Application::Start()
 
 	GO = Spawn(Vector2(0.0f, 0.0f), 0.0f, Vector2(1.0f, 1.0f));
 	GO->GetSprite().SetFilePath("../media/NomadAvatar.bmp");
+
+	GO = Spawn(Vector2(0.0f, 0.0f), 0.0f, Vector2(1.0f, 1.0f));
+	GO->GetSprite().SetFilePath("../media/Jake.bmp");
 }
 
 void Application::Update(float deltaTime)
 {
 	time += deltaTime;
 
-	// Set this to folow the mouse position
-	Transform2D m_transform1;
-	m_transform1 = FindGameObject(0).GetTransform();
-	m_transform1.position =
+	// Set this to follow the mouse position
+	Transform2D m_transform0;
+	m_transform0 = FindGameObject(0).GetTransform();
+	m_transform0.position =
 		Vector2
 		(
 			xMousePos, yMousePos
 		);
-	FindGameObject(0).SetTransform(m_transform1);
+	FindGameObject(0).SetTransform(m_transform0);
+
+	// Set this to follow the OTHER mouse position
+	Transform2D m_transform1;
+	m_transform1 = FindGameObject(1).GetTransform();
+	m_transform1.position =
+		Vector2
+		(
+			photon->receivePositionX(), photon->receivePositionY()
+		);
+	FindGameObject(1).SetTransform(m_transform1);
 }
 
 void Application::Draw()
