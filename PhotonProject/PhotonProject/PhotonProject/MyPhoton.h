@@ -1,7 +1,7 @@
+
 #pragma once
 
 #include <LoadBalancing-cpp/inc/Client.h>
-
 
 class MyPhoton : private ExitGames::LoadBalancing::Listener
 {
