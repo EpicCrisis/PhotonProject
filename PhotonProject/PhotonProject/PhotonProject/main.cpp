@@ -10,6 +10,14 @@
 const int RESOLUTION_X = 800;
 const int RESOLUTION_Y = 600;
 
+float tick = 0.0f;
+float tickRate = 0.01f;
+
+bool bVSync = true;
+float lastUpdateTime = 0.0f;
+float deltaTime = 0.0f;
+float FPS = 0.0f;
+
 void OnWindowResized(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
@@ -33,9 +41,6 @@ void Controls(GLFWwindow* window, int key, int scanCode, int action, int mods)
 		}
 	}
 }
-
-float tick = 0.0f;
-float tickRate = 0.01f;
 
 void UpdateGame(float deltaTime)
 {
@@ -62,11 +67,6 @@ static void cursor_position_callback(GLFWwindow* window, double xPos, double yPo
 		Application::Instance().network->sendEvent(myID, xPos, yPos - RESOLUTION_Y);
 	}
 }
-
-bool bVSync = true;
-float lastUpdateTime = 0.0f;
-float deltaTime = 0.0f;
-float FPS = 0.0f;
 
 int main(void)
 {

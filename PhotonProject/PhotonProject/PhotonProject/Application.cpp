@@ -103,7 +103,7 @@ void Application::Update(float deltaTime)
 	m_transform1.position =
 		Vector2
 		(
-			network->data[1], network->data[2]
+			network->cursorPos[1], network->cursorPos[2]
 		);
 	FindGameObject(1).SetTransform(m_transform1);
 }

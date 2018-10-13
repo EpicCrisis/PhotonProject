@@ -108,6 +108,8 @@ void MyPhoton::customEventAction(int playerNr, nByte eventCode, const ExitGames:
 	if (data)
 	{
 		std::cout << data[0] << ", " << data[1] << ", " << data[2] << std::endl;
+		cursorPos[0] = data[1];
+		cursorPos[1] = data[2];
 	}
 	else 
 	{

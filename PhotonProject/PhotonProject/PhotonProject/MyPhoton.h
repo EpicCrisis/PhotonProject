@@ -16,6 +16,7 @@ public:
 	void disconnect(void);
 	void sendEvent(float myID, float x, float y);
 
+	float cursorPos[2];
 	float data[3];
 
 private:
