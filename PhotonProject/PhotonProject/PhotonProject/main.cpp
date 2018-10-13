@@ -4,11 +4,37 @@
 #include <Windows.h>
 #include <gl/GLU.h>
 #include <GLFW/glfw3.h>
-#include "Application.h"
+#include "Renderer.h"
 #include <ctime>
 
 const int RESOLUTION_X = 800;
 const int RESOLUTION_Y = 600;
+
+const int TEXTURE_COUNT = 2;
+
+// Texture function.
+enum Texture
+{
+	T_NOMAD = 0,
+};
+GLuint mTextureID[TEXTURE_COUNT];
+unsigned int mTextureSize[TEXTURE_COUNT][2];
+
+// Photon function.
+MyPhoton* network = NULL;
+const int playerID = 0;
+float cursorPos[2];
+
+// Application function.
+bool bVSync = true;
+float deltaTime;
+float lastUpdateTime;
+float FPS;
+
+void OnWindowResized(GLFWwindow* window, int width, int height);
+void OnCursorMove(GLFWwindow* window, double xPos, double yPos);
+void OnExitKey(GLFWwindow* window, int key, int scanCode, int action, int mods);
+void OnLeftMouseButton(GLFWwindow* window, int button, int action, int mods);
 
 void OnWindowResized(GLFWwindow* window, int width, int height)
 {
@@ -23,50 +49,39 @@ void OnWindowResized(GLFWwindow* window, int width, int height)
 	glLoadIdentity();
 }
 
-void Controls(GLFWwindow* window, int key, int scanCode, int action, int mods)
+void OnCursorMove(GLFWwindow* window, double xPos, double yPos)
 {
-	if (action == GLFW_PRESS)
+	if (network != NULL)
 	{
-		if (key == GLFW_KEY_ESCAPE)
+		int myID = 4201;
+		network->sendEvent(myID, xPos, yPos - RESOLUTION_Y);
+	}
+}
+
+void OnExitKey(GLFWwindow* window, int key, int scanCode, int action, int mods)
+{
+	if (network != NULL)
+	{
+		if (action == GLFW_PRESS)
 		{
-			glfwSetWindowShouldClose(window, GL_TRUE);
+			if (key == GLFW_KEY_ESCAPE)
+			{
+				glfwSetWindowShouldClose(window, GL_TRUE);
+			}
 		}
 	}
 }
 
-float tick = 0.0f;
-float tickRate = 0.01f;
-
-void UpdateGame(float deltaTime)
+void OnLeftMouseButton(GLFWwindow * window, int button, int action, int mods)
 {
-	Application::Instance().Update(deltaTime);
-
-	tick -= deltaTime;
-
-	if (tick <= 0.0f)
+	if (network != NULL)
 	{
-		tick = tickRate;
-		//system("CLS");
-		//std::cout << "Delta Time : " << deltaTime << " | ";
-		//std::cout << "FPS : " << 1.0f / deltaTime << " | ";
-		//std::cout << "Time : " << Application::Instance().time << std::endl;
+		if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+		{
+			network->sendEvent(playerID, 1.0f, 0.0f);
+		}
 	}
 }
-
-static void cursor_position_callback(GLFWwindow* window, double xPos, double yPos)
-{
-	if (Application::Instance().network != NULL)
-	{
-		int myID = 4201;
-		Application::Instance().SetMousePos(xPos, yPos - RESOLUTION_Y);
-		Application::Instance().network->sendEvent(myID, xPos, yPos - RESOLUTION_Y);
-	}
-}
-
-bool bVSync = true;
-float lastUpdateTime = 0.0f;
-float deltaTime = 0.0f;
-float FPS = 0.0f;
 
 int main(void)
 {
@@ -92,25 +107,48 @@ int main(void)
 	OnWindowResized(window, RESOLUTION_X, RESOLUTION_Y);
 	// Check for windows change size.
 	glfwSetWindowSizeCallback(window, OnWindowResized);
-	// Check for input keys.
-	glfwSetKeyCallback(window, Controls);
+	// Check for escape (exit) key.
+	glfwSetKeyCallback(window, OnExitKey);
 	// Return the position of the cursor position.
-	glfwSetCursorPosCallback(window, cursor_position_callback);
-	// Run application start.
-	Application::Instance().Start();
+	glfwSetCursorPosCallback(window, OnCursorMove);
+	// Check for left mouse button.
+	glfwSetMouseButtonCallback(window, OnLeftMouseButton);
+
+	// Support alpha channel.
+	glDisable(GL_CULL_FACE);
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_ALPHA_TEST);
+
+	// Load Textures.
+	// Need to call after window's created.
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(TEXTURE_COUNT, mTextureID);
+
+	Renderer::LoadTexture("NomadAvatar.png", mTextureID[T_NOMAD], mTextureSize[T_NOMAD][0], mTextureSize[T_NOMAD][1]);
+
+	// Initialize network.
+	network = new MyPhoton();
+	network->connect();
 
 	while (!glfwWindowShouldClose(window))
 	{
 		// Render here,
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Calculate delta time and FPS.
 		deltaTime = (float)glfwGetTime() - lastUpdateTime;
 		lastUpdateTime = (float)glfwGetTime();
 		FPS = 1.0f / deltaTime;
 
-		UpdateGame(deltaTime);
-		Application::Instance().Draw();
+		Renderer::RenderSquare
+		(mTextureID[T_NOMAD], (int)cursorPos[0], (int)cursorPos[1] - RESOLUTION_Y, 380, 370, 0);
+
+		Renderer::RenderSquare
+		(mTextureID[T_NOMAD], (int)network->cursorPos[0], (int)network->cursorPos[1] - RESOLUTION_Y, 380, 370, 0);
+
+		network->run();
 	
 		glfwSwapBuffers(window);
 		glfwPollEvents();

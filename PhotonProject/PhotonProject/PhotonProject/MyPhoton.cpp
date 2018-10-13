@@ -1,7 +1,6 @@
 
 #include "MyPhoton.h"
 #include <iostream>
-#include "Application.h"
 
 static const ExitGames::Common::JString appId = L"af3dea0c-4afb-4ea8-ad5a-fb120473ceff"; // set your app id here
 static const ExitGames::Common::JString appVersion = L"1.0";
@@ -108,6 +107,8 @@ void MyPhoton::customEventAction(int playerNr, nByte eventCode, const ExitGames:
 	if (data)
 	{
 		std::cout << data[0] << ", " << data[1] << ", " << data[2] << std::endl;
+		cursorPos[0] = data[1];
+		cursorPos[1] = data[2];
 	}
 	else 
 	{
