@@ -14,10 +14,10 @@ public:
 	//void opJoinRandomRoom(void);
 	//void opJoinOrCreateRoom(void);
 	void disconnect(void);
+	void sendEvent(void);
 	void sendEvent(float myID, float x, float y);
 
 	float cursorPos[2];
-	float data[3];
 
 private:
 	// receive and print out debug out here

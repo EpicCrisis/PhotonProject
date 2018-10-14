@@ -15,7 +15,7 @@ Application::~Application()
 void Application::SetMousePos(float x, float y)
 {
 	mousePos[0] = x;
-	mousePos[1] = -y; // Display start position and mouse start position is inverse.
+	mousePos[1] = y;
 }
 
 GameObject* Application::Spawn()
@@ -85,8 +85,6 @@ void Application::Update(float deltaTime)
 {
 	time += deltaTime;
 
-	network->run();
-
 	// Set this to follow the mouse position
 	Transform2D m_transform0;
 	m_transform0 = FindGameObject(0).GetTransform();
@@ -103,9 +101,11 @@ void Application::Update(float deltaTime)
 	m_transform1.position =
 		Vector2
 		(
-			network->cursorPos[1], network->cursorPos[2]
+			network->cursorPos[0], network->cursorPos[1]
 		);
 	FindGameObject(1).SetTransform(m_transform1);
+
+	network->run();
 }
 
 void Application::Draw()

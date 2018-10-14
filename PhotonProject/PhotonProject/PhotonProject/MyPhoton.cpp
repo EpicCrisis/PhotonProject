@@ -52,8 +52,17 @@ void MyPhoton::run(void)
 	mLoadBalancingClient.service();
 }
 
+void MyPhoton::sendEvent(void)
+{
+	//static int64 count = 0;
+	//mLoadBalancingClient.opRaiseEvent(false, ++count, 0);
+	int number = 2;
+	mLoadBalancingClient.opRaiseEvent(false, number, 0);
+}
+
 void MyPhoton::sendEvent(float myID, float x, float y)
 {
+	float data[3];
 	data[0] = myID;
 	data[1] = x;
 	data[2] = y;

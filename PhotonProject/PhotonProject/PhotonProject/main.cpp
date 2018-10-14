@@ -18,6 +18,8 @@ float lastUpdateTime = 0.0f;
 float deltaTime = 0.0f;
 float FPS = 0.0f;
 
+static int playerID;
+
 void OnWindowResized(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
@@ -31,14 +33,11 @@ void OnWindowResized(GLFWwindow* window, int width, int height)
 	glLoadIdentity();
 }
 
-void Controls(GLFWwindow* window, int key, int scanCode, int action, int mods)
+void OnEscapeKey(GLFWwindow* window, int key, int scanCode, int action, int mods)
 {
-	if (action == GLFW_PRESS)
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
-		if (key == GLFW_KEY_ESCAPE)
-		{
-			glfwSetWindowShouldClose(window, GL_TRUE);
-		}
+		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
 }
 
@@ -58,13 +57,30 @@ void UpdateGame(float deltaTime)
 	}
 }
 
-static void cursor_position_callback(GLFWwindow* window, double xPos, double yPos)
+static void OnCursorMove(GLFWwindow* window, double xPos, double yPos)
+{
+	Application::Instance().SetMousePos(xPos, RESOLUTION_Y - yPos);
+
+	if (Application::Instance().network != NULL)
+	{
+		playerID = 4201;
+		Application::Instance().network->sendEvent(playerID, xPos, RESOLUTION_Y - yPos);
+
+		if (glfwGetMouseButton(window, GLFW_PRESS))
+		{
+
+		}
+	}
+}
+
+void OnLeftMouseButton(GLFWwindow* window, int button, int action, int mods)
 {
 	if (Application::Instance().network != NULL)
 	{
-		int myID = 4201;
-		Application::Instance().SetMousePos(xPos, yPos - RESOLUTION_Y);
-		Application::Instance().network->sendEvent(myID, xPos, yPos - RESOLUTION_Y);
+		if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+		{
+			Application::Instance().network->sendEvent(playerID, 1.0f, 0.0f);
+		}
 	}
 }
 
@@ -93,9 +109,9 @@ int main(void)
 	// Check for windows change size.
 	glfwSetWindowSizeCallback(window, OnWindowResized);
 	// Check for input keys.
-	glfwSetKeyCallback(window, Controls);
+	glfwSetKeyCallback(window, OnEscapeKey);
 	// Return the position of the cursor position.
-	glfwSetCursorPosCallback(window, cursor_position_callback);
+	glfwSetCursorPosCallback(window, OnCursorMove);
 	// Run application start.
 	Application::Instance().Start();
 
