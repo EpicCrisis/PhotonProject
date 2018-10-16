@@ -74,11 +74,31 @@ void Application::Start()
 
 	network->connect();
 
-	GO = Spawn(Vector2(0.0f, 0.0f), 0.0f, Vector2(1.0f, 1.0f));
-	GO->GetSprite().SetFilePath("../media/NomadAvatar.bmp");
+	// 0
+	GO = Spawn(Vector2(0.0f, 0.0f), 0.0f, Vector2(0.5f, 0.5f));
+	GO->GetSprite().SetFilePath("../media/CrosshairRed.bmp");
+	GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
 
-	GO = Spawn(Vector2(0.0f, 0.0f), 0.0f, Vector2(1.0f, 1.0f));
-	GO->GetSprite().SetFilePath("../media/Jake.bmp");
+	// 1
+	GO = Spawn(Vector2(0.0f, 0.0f), 0.0f, Vector2(0.5f, 0.5f));
+	GO->GetSprite().SetFilePath("../media/CrosshairBlue.bmp");
+	GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
+
+	// 2
+	GO = Spawn(Vector2(60.0f, 550.0f), 0.0f, Vector2(1.0f, 1.0f));
+	GO->GetSprite().SetFilePath("../media/TicTacToeTitle.bmp");
+	GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
+
+	for (int i = 0; i < 3; ++i)
+	{
+		for (int j = 0; j < 3; ++j)
+		{
+			// 3 ~ 11
+			GO = Spawn(Vector2(300.0f + (j * 120.0f), 400.0f + (i * -120.0f)), 0.0f, Vector2(1.0f, 1.0f));
+			GO->GetSprite().SetFilePath("../media/Box.bmp");
+			GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
+		}
+	}
 }
 
 void Application::Update(float deltaTime)
