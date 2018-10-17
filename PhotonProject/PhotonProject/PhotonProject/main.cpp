@@ -65,11 +65,6 @@ static void OnCursorMove(GLFWwindow* window, double xPos, double yPos)
 	{
 		playerID = 4201;
 		Application::Instance().network->sendEvent(playerID, xPos, RESOLUTION_Y - yPos);
-
-		if (glfwGetMouseButton(window, GLFW_PRESS))
-		{
-
-		}
 	}
 }
 
@@ -80,6 +75,7 @@ void OnLeftMouseButton(GLFWwindow* window, int button, int action, int mods)
 		if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 		{
 			Application::Instance().network->sendEvent(playerID, 1.0f, 0.0f);
+			Application::Instance().CheckClickBoxPosition();
 		}
 	}
 }
@@ -112,6 +108,9 @@ int main(void)
 	glfwSetKeyCallback(window, OnEscapeKey);
 	// Return the position of the cursor position.
 	glfwSetCursorPosCallback(window, OnCursorMove);
+	// Check left mouse button.
+	glfwSetMouseButtonCallback(window, OnLeftMouseButton);
+
 	// Run application start.
 	Application::Instance().Start();
 
