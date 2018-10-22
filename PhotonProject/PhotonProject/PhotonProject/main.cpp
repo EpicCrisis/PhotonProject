@@ -75,7 +75,11 @@ void OnLeftMouseButton(GLFWwindow* window, int button, int action, int mods)
 		if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 		{
 			Application::Instance().network->sendEvent(playerID, 1.0f, 0.0f);
-			Application::Instance().CheckClickBoxPosition();
+
+			if (!Application::Instance().GetGameOverState())
+			{
+				Application::Instance().CheckClickBoxPosition();
+			}
 		}
 	}
 }

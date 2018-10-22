@@ -21,7 +21,9 @@ private:
 
 	int playerTurn = 0;
 	int alignArray[9];
-	bool isWin = false;
+	bool markArray[9];
+	bool isMark = false;
+	bool isGameOver = false;
 
 public:
 	~Application();
@@ -35,6 +37,7 @@ public:
 	MyPhoton* network;
 
 	void SetMousePos(float x, float y);
+	bool GetGameOverState() { return isGameOver; };
 
 	// overload spawn gameobject function
 	GameObject* Spawn();
@@ -49,7 +52,7 @@ public:
 	// Check for the current player turn, then change the box to either 
 	// a cross or circle depending on player turn.
 	void CheckClickBoxPosition();
-	void UpdateArray(int index);
+	void CheckPlayerWin();
 	void SpawnGrid();
 
 	// create singleton

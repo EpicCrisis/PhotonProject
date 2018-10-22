@@ -80,18 +80,26 @@ void Application::CheckClickBoxPosition()
 		}
 	}*/
 
+	// Check position, check player turn, check have marked, check array align, check win.
 	if (mousePos[0] >= 300.0f + (0 * offset) - halfBoxSize &&
 		mousePos[0] <= 300.0f + (0 * offset) + halfBoxSize &&
 		mousePos[1] >= 400.0f + (0 * -offset) - halfBoxSize &&
 		mousePos[1] <= 400.0f + (0 * -offset) + halfBoxSize)
 	{
-		if (playerTurn == 0)
+		if (!isMark && !markArray[0])
 		{
-			FindGameObject(0).SetSprite(circleSprite);
-		}
-		else
-		{
-			FindGameObject(0).SetSprite(crossSprite);
+			if (playerTurn == 0)
+			{
+				FindGameObject(0).SetSprite(circleSprite);
+				alignArray[0] = 1;
+			}
+			else
+			{
+				FindGameObject(0).SetSprite(crossSprite);
+				alignArray[0] = 2;
+			}
+			isMark = true;
+			markArray[0] = true;
 		}
 	}
 	else if (mousePos[0] >= 300.0f + (1 * offset) - halfBoxSize &&
@@ -99,13 +107,20 @@ void Application::CheckClickBoxPosition()
 		mousePos[1] >= 400.0f + (0 * -offset) - halfBoxSize &&
 		mousePos[1] <= 400.0f + (0 * -offset) + halfBoxSize)
 	{
-		if (playerTurn == 0)
+		if (!isMark && !markArray[1])
 		{
-			FindGameObject(1).SetSprite(circleSprite);
-		}
-		else
-		{
-			FindGameObject(1).SetSprite(crossSprite);
+			if (playerTurn == 0)
+			{
+				FindGameObject(1).SetSprite(circleSprite);
+				alignArray[1] = 1;
+			}
+			else
+			{
+				FindGameObject(1).SetSprite(crossSprite);
+				alignArray[1] = 2;
+			}
+			isMark = true;
+			markArray[1] = true;
 		}
 	}
 	else if (mousePos[0] >= 300.0f + (2 * offset) - halfBoxSize &&
@@ -113,13 +128,20 @@ void Application::CheckClickBoxPosition()
 		mousePos[1] >= 400.0f + (0 * -offset) - halfBoxSize &&
 		mousePos[1] <= 400.0f + (0 * -offset) + halfBoxSize)
 	{
-		if (playerTurn == 0)
+		if (!isMark && !markArray[2])
 		{
-			FindGameObject(2).SetSprite(circleSprite);
-		}
-		else
-		{
-			FindGameObject(2).SetSprite(crossSprite);
+			if (playerTurn == 0)
+			{
+				FindGameObject(2).SetSprite(circleSprite);
+				alignArray[2] = 1;
+			}
+			else
+			{
+				FindGameObject(2).SetSprite(crossSprite);
+				alignArray[2] = 2;
+			}
+			isMark = true;
+			markArray[2] = true;
 		}
 	}
 	else if (mousePos[0] >= 300.0f + (0 * offset) - halfBoxSize &&
@@ -127,13 +149,20 @@ void Application::CheckClickBoxPosition()
 		mousePos[1] >= 400.0f + (1 * -offset) - halfBoxSize &&
 		mousePos[1] <= 400.0f + (1 * -offset) + halfBoxSize)
 	{
-		if (playerTurn == 0)
+		if (!isMark && !markArray[3])
 		{
-			FindGameObject(3).SetSprite(circleSprite);
-		}
-		else
-		{
-			FindGameObject(3).SetSprite(crossSprite);
+			if (playerTurn == 0)
+			{
+				FindGameObject(3).SetSprite(circleSprite);
+				alignArray[3] = 1;
+			}
+			else
+			{
+				FindGameObject(3).SetSprite(crossSprite);
+				alignArray[3] = 2;
+			}
+			isMark = true;
+			markArray[3] = true;
 		}
 	}
 	else if (mousePos[0] >= 300.0f + (1 * offset) - halfBoxSize &&
@@ -141,13 +170,20 @@ void Application::CheckClickBoxPosition()
 		mousePos[1] >= 400.0f + (1 * -offset) - halfBoxSize &&
 		mousePos[1] <= 400.0f + (1 * -offset) + halfBoxSize)
 	{
-		if (playerTurn == 0)
+		if (!isMark && !markArray[4])
 		{
-			FindGameObject(4).SetSprite(circleSprite);
-		}
-		else
-		{
-			FindGameObject(4).SetSprite(crossSprite);
+			if (playerTurn == 0)
+			{
+				FindGameObject(4).SetSprite(circleSprite);
+				alignArray[4] = 1;
+			}
+			else
+			{
+				FindGameObject(4).SetSprite(crossSprite);
+				alignArray[4] = 2;
+			}
+			isMark = true;
+			markArray[4] = true;
 		}
 	}
 	else if (mousePos[0] >= 300.0f + (2 * offset) - halfBoxSize &&
@@ -155,13 +191,20 @@ void Application::CheckClickBoxPosition()
 		mousePos[1] >= 400.0f + (1 * -offset) - halfBoxSize &&
 		mousePos[1] <= 400.0f + (1 * -offset) + halfBoxSize)
 	{
-		if (playerTurn == 0)
+		if (!isMark && !markArray[5])
 		{
-			FindGameObject(5).SetSprite(circleSprite);
-		}
-		else
-		{
-			FindGameObject(5).SetSprite(crossSprite);
+			if (playerTurn == 0)
+			{
+				FindGameObject(5).SetSprite(circleSprite);
+				alignArray[5] = 1;
+			}
+			else
+			{
+				FindGameObject(5).SetSprite(crossSprite);
+				alignArray[5] = 2;
+			}
+			isMark = true;
+			markArray[5] = true;
 		}
 	}
 	else if (mousePos[0] >= 300.0f + (0 * offset) - halfBoxSize &&
@@ -169,13 +212,20 @@ void Application::CheckClickBoxPosition()
 		mousePos[1] >= 400.0f + (2 * -offset) - halfBoxSize &&
 		mousePos[1] <= 400.0f + (2 * -offset) + halfBoxSize)
 	{
-		if (playerTurn == 0)
+		if (!isMark && !markArray[6])
 		{
-			FindGameObject(6).SetSprite(circleSprite);
-		}
-		else
-		{
-			FindGameObject(6).SetSprite(crossSprite);
+			if (playerTurn == 0)
+			{
+				FindGameObject(6).SetSprite(circleSprite);
+				alignArray[6] = 1;
+			}
+			else
+			{
+				FindGameObject(6).SetSprite(crossSprite);
+				alignArray[6] = 2;
+			}
+			isMark = true;
+			markArray[6] = true;
 		}
 	}
 	else if (mousePos[0] >= 300.0f + (1 * offset) - halfBoxSize &&
@@ -183,13 +233,20 @@ void Application::CheckClickBoxPosition()
 		mousePos[1] >= 400.0f + (2 * -offset) - halfBoxSize &&
 		mousePos[1] <= 400.0f + (2 * -offset) + halfBoxSize)
 	{
-		if (playerTurn == 0)
+		if (!isMark && !markArray[7])
 		{
-			FindGameObject(7).SetSprite(circleSprite);
-		}
-		else
-		{
-			FindGameObject(7).SetSprite(crossSprite);
+			if (playerTurn == 0)
+			{
+				FindGameObject(7).SetSprite(circleSprite);
+				alignArray[7] = 1;
+			}
+			else
+			{
+				FindGameObject(7).SetSprite(crossSprite);
+				alignArray[7] = 2;
+			}
+			isMark = true;
+			markArray[7] = true;
 		}
 	}
 	else if (mousePos[0] >= 300.0f + (2 * offset) - halfBoxSize &&
@@ -197,27 +254,92 @@ void Application::CheckClickBoxPosition()
 		mousePos[1] >= 400.0f + (2 * -offset) - halfBoxSize &&
 		mousePos[1] <= 400.0f + (2 * -offset) + halfBoxSize)
 	{
-		if (playerTurn == 0)
+		if (!isMark && !markArray[8])
 		{
-			FindGameObject(8).SetSprite(circleSprite);
-		}
-		else
-		{
-			FindGameObject(8).SetSprite(crossSprite);
+			if (playerTurn == 0)
+			{
+				FindGameObject(8).SetSprite(circleSprite);
+				alignArray[8] = 1;
+			}
+			else
+			{
+				FindGameObject(8).SetSprite(crossSprite);
+				alignArray[8] = 2;
+			}
+			isMark = true;
+			markArray[8] = true;
 		}
 	}
 
+	CheckPlayerWin();
+
 	// Make sure there is a mark before switching player.
-	++playerTurn;
-	if (playerTurn % 2 == 0)
+	if (isMark)
 	{
-		playerTurn = 0;
+		++playerTurn;
+		if (playerTurn % 2 == 0)
+		{
+			playerTurn = 0;
+		}
+		isMark = false;
 	}
 }
 
-void Application::UpdateArray(int index)
+void Application::CheckPlayerWin()
 {
+	if (// horizontal win
+		alignArray[0] == 1 && alignArray[1] == 1 && alignArray[2] == 1 ||
+		alignArray[3] == 1 && alignArray[4] == 1 && alignArray[5] == 1 ||
+		alignArray[6] == 1 && alignArray[7] == 1 && alignArray[8] == 1 ||
+		// vertical win
+		alignArray[0] == 1 && alignArray[3] == 1 && alignArray[6] == 1 ||
+		alignArray[1] == 1 && alignArray[4] == 1 && alignArray[7] == 1 ||
+		alignArray[2] == 1 && alignArray[5] == 1 && alignArray[8] == 1 ||
+		// diagonal win
+		alignArray[0] == 1 && alignArray[4] == 1 && alignArray[8] == 1 ||
+		alignArray[2] == 1 && alignArray[4] == 1 && alignArray[6] == 1
+		)
+	{
+		GO = Spawn(Vector2(420.0f, 50.0f), 0.0f, Vector2(3.0f, 0.5f));
+		GO->GetSprite().SetFilePath("../media/Player1Win.bmp");
+		GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
 
+		std::cout << "Player 1 Win!" << std::endl;
+		isGameOver = true;
+	}
+	else if (// horizontal win
+		alignArray[0] == 2 && alignArray[1] == 2 && alignArray[2] == 2 ||
+		alignArray[3] == 2 && alignArray[4] == 2 && alignArray[5] == 2 ||
+		alignArray[6] == 2 && alignArray[7] == 2 && alignArray[8] == 2 ||
+		// vertical win
+		alignArray[0] == 2 && alignArray[3] == 2 && alignArray[6] == 2 ||
+		alignArray[1] == 2 && alignArray[4] == 2 && alignArray[7] == 2 ||
+		alignArray[2] == 2 && alignArray[5] == 2 && alignArray[8] == 2 ||
+		// diagonal win
+		alignArray[0] == 2 && alignArray[4] == 2 && alignArray[8] == 2 ||
+		alignArray[2] == 2 && alignArray[4] == 2 && alignArray[6] == 2
+		)
+	{
+		GO = Spawn(Vector2(420.0f, 50.0f), 0.0f, Vector2(3.0f, 0.5f));
+		GO->GetSprite().SetFilePath("../media/Player2Win.bmp");
+		GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
+
+		std::cout << "Player 2 Win!" << std::endl;
+		isGameOver = true;
+	}
+	else if (// draw
+		alignArray[0] != 0 && alignArray[1] != 0 && alignArray[2] != 0 &&
+		alignArray[3] != 0 && alignArray[4] != 0 && alignArray[5] != 0 &&
+		alignArray[6] != 0 && alignArray[7] != 0 && alignArray[8] != 0
+		)
+	{
+		GO = Spawn(Vector2(420.0f, 50.0f), 0.0f, Vector2(3.0f, 0.5f));
+		GO->GetSprite().SetFilePath("../media/GameDraw.bmp");
+		GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
+
+		std::cout << "Game Draw!" << std::endl;
+		isGameOver = true;
+	}
 }
 
 void Application::SpawnGrid()
