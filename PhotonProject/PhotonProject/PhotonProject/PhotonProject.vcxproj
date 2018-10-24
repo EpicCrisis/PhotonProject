@@ -24,6 +24,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MyPhoton.cpp" />
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="UIntPacker.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Vector3.cpp" />
   </ItemGroup>
@@ -39,6 +40,7 @@
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="TemplateList.h" />
     <ClInclude Include="Transform2D.h" />
+    <ClInclude Include="UIntPacker.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />

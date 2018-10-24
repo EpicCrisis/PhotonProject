@@ -101,6 +101,17 @@ void MyPhoton::joinRoomEventAction(int playerNr, const ExitGames::Common::JVecto
 {
 	std::wcout << "joinRoomEventAction" << std::endl;
 	//sendEvent();
+	// No work.
+	if (isFirst)
+	{
+		currentPlayer = 1;
+		std::cout << "YOU ARE FIRST" << std::endl;
+	}
+	else
+	{
+		currentPlayer = 2;
+		std::cout << "YOU ARE NOT FIRST" << std::endl;
+	}
 }
 
 void MyPhoton::leaveRoomEventAction(int playerNr, bool isInactive)
@@ -146,11 +157,15 @@ void MyPhoton::disconnectReturn(void)
 	std::wcout << "disconnected" << std::endl;
 }
 
+// For first player, determine if player created room.
 void MyPhoton::createRoomReturn(int localPlayerNr, const ExitGames::Common::Hashtable&
 	/*gameProperties*/, const ExitGames::Common::Hashtable&
 	/*playerProperties*/, int errorCode, const ExitGames::Common::JString& errorString)
 {
 	std::wcout << "createRoomReturn" << std::endl;
+
+	// No work.
+	isFirst = true;
 }
 
 void MyPhoton::joinOrCreateRoomReturn(int localPlayerNr, const ExitGames::Common::Hashtable&

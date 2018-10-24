@@ -91,6 +91,7 @@ void Application::CheckClickBoxPosition()
 			if (playerTurn == 0)
 			{
 				FindGameObject(0).SetSprite(circleSprite);
+				GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
 				alignArray[0] = 1;
 			}
 			else
@@ -271,8 +272,6 @@ void Application::CheckClickBoxPosition()
 		}
 	}
 
-	CheckPlayerWin();
-
 	// Make sure there is a mark before switching player.
 	if (isMark)
 	{
@@ -282,6 +281,10 @@ void Application::CheckClickBoxPosition()
 			playerTurn = 0;
 		}
 		isMark = false;
+
+		CheckPlayerWin();
+		UpdatePlayerTurn();
+		PackData();
 	}
 }
 
@@ -300,11 +303,13 @@ void Application::CheckPlayerWin()
 		alignArray[2] == 1 && alignArray[4] == 1 && alignArray[6] == 1
 		)
 	{
+		// always last to spawn
 		GO = Spawn(Vector2(420.0f, 50.0f), 0.0f, Vector2(3.0f, 0.5f));
-		GO->GetSprite().SetFilePath("../media/Player1Win.bmp");
+		GO->GetSprite().SetFilePath("../media/YouWin.bmp");
 		GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
 
-		std::cout << "Player 1 Win!" << std::endl;
+		std::cout << "YOU WIN!" << std::endl;
+
 		isGameOver = true;
 	}
 	else if (// horizontal win
@@ -320,11 +325,13 @@ void Application::CheckPlayerWin()
 		alignArray[2] == 2 && alignArray[4] == 2 && alignArray[6] == 2
 		)
 	{
+		// always last to spawn
 		GO = Spawn(Vector2(420.0f, 50.0f), 0.0f, Vector2(3.0f, 0.5f));
-		GO->GetSprite().SetFilePath("../media/Player2Win.bmp");
+		GO->GetSprite().SetFilePath("../media/YouLose.bmp");
 		GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
 
-		std::cout << "Player 2 Win!" << std::endl;
+		std::cout << "YOU LOSE!" << std::endl;
+
 		isGameOver = true;
 	}
 	else if (// draw
@@ -354,11 +361,48 @@ void Application::SpawnGrid()
 			GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
 		}
 	}
-
 	// 9
 	GO = Spawn(Vector2(60.0f, 550.0f), 0.0f, Vector2(1.0f, 1.0f));
 	GO->GetSprite().SetFilePath("../media/TicTacToeTitle.bmp");
 	GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
+}
+
+void Application::UpdatePlayerTurn()
+{
+	if (!isGameOver)
+	{
+		if (playerTurn == 0)
+		{
+			// 10, will change between sprites!
+			FindGameObject(10).GetSprite().SetFilePath("../media/YourTurn.bmp");
+			GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
+		}
+		else if (playerTurn == 1)
+		{
+			// 10, will change between sprites!
+			FindGameObject(10).GetSprite().SetFilePath("../media/OtherTurn.bmp");
+			GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
+		}
+	}
+}
+
+void Application::PackData()
+{
+	//for (int i = 0; i < 9; ++i)
+	//{
+
+	//	//unsigned int value = packer->Extract(32);
+
+	//	//std::cout << "Extract Value " << value << std::endl;
+	//}
+
+	packer->Pack(alignArray[1], 32);
+
+	std::cout << "Pack Value " << packer->GetData() << std::endl;
+
+	unsigned int value = packer->Extract(32);
+
+	std::cout << "Extract Value " << value << std::endl;
 }
 
 Application & Application::Instance()
@@ -374,6 +418,7 @@ void Application::Start()
 	
 	network = new MyPhoton();
 
+	// Here is where you will determine which is the current player.
 	network->connect();
 
 	boxSprite.SetFilePath("../media/Box.bmp");
@@ -382,40 +427,15 @@ void Application::Start()
 
 	SpawnGrid();
 
-	// 10
-	GO = Spawn(Vector2(0.0f, 0.0f), 0.0f, Vector2(0.5f, 0.5f));
-	GO->GetSprite().SetFilePath("../media/CrosshairRed.bmp");
-	GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
+	// 10, spawn game object to show player turn
+	GO = Spawn(Vector2(420.0f, 500.0f), 0.0f, Vector2(3.0f, 0.35f));
 
-	// 11
-	GO = Spawn(Vector2(0.0f, 0.0f), 0.0f, Vector2(0.5f, 0.5f));
-	GO->GetSprite().SetFilePath("../media/CrosshairBlue.bmp");
-	GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
+	UpdatePlayerTurn();
 }
 
 void Application::Update(float deltaTime)
 {
 	time += deltaTime;
-
-	// Set this to follow the mouse position
-	Transform2D m_transform0;
-	m_transform0 = FindGameObject(10).GetTransform();
-	m_transform0.position =
-		Vector2
-		(
-			mousePos[0], mousePos[1]
-		);
-	FindGameObject(10).SetTransform(m_transform0);
-
-	// Set this to follow the OTHER mouse position
-	Transform2D m_transform1;
-	m_transform1 = FindGameObject(11).GetTransform();
-	m_transform1.position =
-		Vector2
-		(
-			network->cursorPos[0], network->cursorPos[1]
-		);
-	FindGameObject(11).SetTransform(m_transform1);
 
 	network->run();
 }

@@ -64,7 +64,7 @@ static void OnCursorMove(GLFWwindow* window, double xPos, double yPos)
 	if (Application::Instance().network != NULL)
 	{
 		playerID = 4201;
-		Application::Instance().network->sendEvent(playerID, xPos, RESOLUTION_Y - yPos);
+		//Application::Instance().network->sendEvent(playerID, xPos, RESOLUTION_Y - yPos);
 	}
 }
 

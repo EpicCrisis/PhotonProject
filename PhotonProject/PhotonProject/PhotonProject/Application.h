@@ -5,6 +5,7 @@
 #include "MyPhoton.h"
 #include "GameObject.h"
 #include "GameObjectContainer.h"
+#include "UIntPacker.h"
 
 class Application
 {
@@ -19,6 +20,7 @@ private:
 	float halfBoxSize = 50.0f;
 	float offset = 120.0f;
 
+	int currentPlayer; // Set this based on who created the room.
 	int playerTurn = 0;
 	int alignArray[9];
 	bool markArray[9];
@@ -35,6 +37,7 @@ public:
 	Sprite crossSprite;
 
 	MyPhoton* network;
+	UIntPacker* packer = new UIntPacker;
 
 	void SetMousePos(float x, float y);
 	bool GetGameOverState() { return isGameOver; };
@@ -54,6 +57,8 @@ public:
 	void CheckClickBoxPosition();
 	void CheckPlayerWin();
 	void SpawnGrid();
+	void UpdatePlayerTurn();
+	void PackData();
 
 	// create singleton
 	static Application& Instance();
