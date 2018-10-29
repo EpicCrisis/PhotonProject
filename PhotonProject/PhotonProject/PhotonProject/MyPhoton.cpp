@@ -70,6 +70,11 @@ void MyPhoton::sendEvent(float myID, float x, float y)
 	mLoadBalancingClient.opRaiseEvent(true, data, 3, 1);
 }
 
+void MyPhoton::sendData(unsigned char data)
+{
+	mLoadBalancingClient.opRaiseEvent(true, data, 1);
+}
+
 // protocol implementations
 
 void MyPhoton::debugReturn(int debugLevel, const ExitGames::Common::JString& string)
@@ -104,9 +109,14 @@ void MyPhoton::joinRoomEventAction(int playerNr, const ExitGames::Common::JVecto
 	
 	Application::Instance().SetCurrentPlayer(playerNr);
 
+	// debug test.
+	//Application::Instance().SetGameState(STATE_STARTGAME);
+	//Application::Instance().UpdatePlayerTurn();
+
 	if (playernrs.getSize() >= 2)
 	{
 		Application::Instance().SetGameState(STATE_STARTGAME);
+		Application::Instance().UpdateTurnSprite();
 	}
 }
 
@@ -120,14 +130,13 @@ void MyPhoton::customEventAction(int playerNr, nByte eventCode, const ExitGames:
 	// you do not receive your own events, unless you specify yourself as one of the receivers explicitly, 
 	// so you must start 2 clients, to receive the events, which you have sent, as sendEvent() uses the default 
 	// receivers of opRaiseEvent() (all players in same room like the sender, except the sender itself)
-	float* data = ExitGames::Common::ValueObject<float*>(eventContent).getDataCopy();
+	//float* data = ExitGames::Common::ValueObject<float*>(eventContent).getDataCopy();
+	unsigned char data = ExitGames::Common::ValueObject<unsigned char>(eventContent).getDataCopy();
 	if (data)
 	{
-		std::cout << data[0] << ", " << data[1] << ", " << data[2] << std::endl;
-		cursorPos[0] = data[1];
-		cursorPos[1] = data[2];
+		Application::Instance().ReceiveData(data, 4);
 	}
-	else 
+	else
 	{
 		std::cout << "invalid data" << std::endl;
 	}

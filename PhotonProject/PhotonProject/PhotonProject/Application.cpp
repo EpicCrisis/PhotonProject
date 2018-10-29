@@ -12,12 +12,6 @@ Application::~Application()
 
 }
 
-void Application::SetMousePos(float x, float y)
-{
-	mousePos[0] = x;
-	mousePos[1] = y;
-}
-
 GameObject* Application::Spawn()
 {
 	return Spawn(new GameObject());
@@ -59,6 +53,12 @@ void Application::Destroy(GameObject* gameObject)
 	delete gameObject;
 }
 
+void Application::SetMousePos(float x, float y)
+{
+	mousePos[0] = x;
+	mousePos[1] = y;
+}
+
 void Application::CheckClickBoxPosition()
 {
 	// Check position, check player turn, check have marked, check array align, check win.
@@ -66,113 +66,48 @@ void Application::CheckClickBoxPosition()
 	{
 		for (int j = 0; j < 3; ++j)
 		{
-			if (mousePos[0] >= 300.0f + (j * offset) - halfBoxSize && 
+			if (mousePos[0] >= 300.0f + (j * offset) - halfBoxSize &&
 				mousePos[0] <= 300.0f + (j * offset) + halfBoxSize &&
-				mousePos[1] >= 400.0f + (i * -offset) - halfBoxSize && 
+				mousePos[1] >= 400.0f + (i * -offset) - halfBoxSize &&
 				mousePos[1] <= 400.0f + (i * -offset) + halfBoxSize)
 			{
 				int k = (i * 3) + j;
-					
-				if (!isMark && alignArray[k] == 0)
+
+				if (playerTurn == 0 && currentPlayer == 1)
 				{
-					if (playerTurn == 0 && currentPlayer == 1)
+					if (alignArray[k] == 0)
 					{
-						FindGameObject(k).SetSprite(circleSprite);
-						GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
 						alignArray[k] = 1;
 
-						packer->Pack(alignArray[k], 8);
-						isMark = true;
+						network->sendData(packer->Pack(k + 1, 4));
+						std::cout << k << std::endl;
+						//std::cout << packer->Pack(boardIndex, 4) << std::endl;
+
+						UpdateBoard(k);
+						UpdateTurn();
 					}
-					else if (playerTurn == 1 && currentPlayer == 2)
+				}
+				else if (playerTurn == 1 && currentPlayer == 2)
+				{
+					if (alignArray[k] == 0)
 					{
-						FindGameObject(k).SetSprite(crossSprite);
-						GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
 						alignArray[k] = 2;
 
-						packer->Pack(alignArray[k], 8);
-						isMark = true;
+						network->sendData(packer->Pack(k + 1, 4));
+						std::cout << k << std::endl;
+						//std::cout << packer->Pack(boardIndex, 4) << std::endl;
+
+						UpdateBoard(k);
+						UpdateTurn();
 					}
 				}
 			}
 		}
 	}
-
-	// Make sure there is a mark before switching player.
-	if (isMark)
-	{
-		CheckPlayerWin();
-
-		++playerTurn;
-		if (playerTurn % 2 == 0)
-		{
-			playerTurn = 0;
-		}
-		isMark = false;
-
-		UpdatePlayerTurn();
-		PackData();
-	}
 }
 
 void Application::CheckPlayerWin()
 {
-	//for (int i = 0; i < 9; ++i)
-	//{
-	//	for (int j = 0; j < 9; ++j)
-	//	{
-	//		if (
-	//			alignArray[i] == 1 || alignArray[j] == 1 ||
-	//			alignArray[0] == 1 && alignArray[4] == 1 && alignArray[8] == 1 ||
-	//			alignArray[2] == 1 && alignArray[4] == 1 && alignArray[6] == 1
-	//			)
-	//		{
-	//			if (currentPlayer == 1 && playerTurn == 0 ||
-	//				currentPlayer == 2 && playerTurn == 1)
-	//			{
-	//				// always last to spawn
-	//				GO = Spawn(Vector2(420.0f, 50.0f), 0.0f, Vector2(3.0f, 0.5f));
-	//				GO->GetSprite().SetFilePath("../media/YouWin.bmp");
-	//				GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
-	//
-	//				std::cout << "YOU WIN!" << std::endl;
-	//			}
-	//		}
-	//		else if (
-	//			alignArray[i] == 2 || alignArray[j] == 2 ||
-	//			alignArray[0] == 2 && alignArray[4] == 2 && alignArray[8] == 2 ||
-	//			alignArray[2] == 2 && alignArray[4] == 2 && alignArray[6] == 2
-	//			)
-	//		{
-	//			if (currentPlayer == 1 && playerTurn == 1 ||
-	//				currentPlayer == 2 && playerTurn == 0)
-	//			{
-	//				// always last to spawn
-	//				GO = Spawn(Vector2(420.0f, 50.0f), 0.0f, Vector2(3.0f, 0.5f));
-	//				GO->GetSprite().SetFilePath("../media/YouLose.bmp");
-	//				GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
-	//
-	//				std::cout << "YOU LOSE!" << std::endl;
-	//			}
-	//
-	//			SetGameState(STATE_GAMEOVER);
-	//		}
-	//		else if (
-	//			alignArray[i] != 0 || alignArray[j] != 0 ||
-	//			alignArray[0] != 0 && alignArray[4] != 0 && alignArray[8] != 0 ||
-	//			alignArray[2] != 0 && alignArray[4] != 0 && alignArray[6] != 0
-	//			)
-	//		{
-	//			GO = Spawn(Vector2(420.0f, 50.0f), 0.0f, Vector2(3.0f, 0.5f));
-	//			GO->GetSprite().SetFilePath("../media/GameDraw.bmp");
-	//			GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
-	//
-	//			std::cout << "Game Draw!" << std::endl;
-	//			SetGameState(STATE_GAMEOVER);
-	//		}
-	//	}
-	//}
-
 	if (
 		// horizontal
 		alignArray[0] == 1 && alignArray[1] == 1 && alignArray[2] == 1 ||
@@ -187,16 +122,25 @@ void Application::CheckPlayerWin()
 		alignArray[2] == 1 && alignArray[4] == 1 && alignArray[6] == 1
 		)
 	{
-		if (currentPlayer == 1 && playerTurn == 0 ||
-			currentPlayer == 2 && playerTurn == 1)
+		if (currentPlayer == 1)
 		{
 			// always last to spawn
 			GO = Spawn(Vector2(420.0f, 50.0f), 0.0f, Vector2(3.0f, 0.5f));
-			GO->GetSprite().SetFilePath("../media/YouWin.bmp");
+			GO->SetSprite(spr_youWin);
 			GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
 
 			std::cout << "YOU WIN!" << std::endl;
 		}
+		else if (currentPlayer == 2)
+		{
+			// always last to spawn
+			GO = Spawn(Vector2(420.0f, 50.0f), 0.0f, Vector2(3.0f, 0.5f));
+			GO->SetSprite(spr_youLose);
+			GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
+
+			std::cout << "YOU LOSE!" << std::endl;
+		}
+		SetGameState(STATE_GAMEOVER);
 	}
 	else if (
 		// horizontal
@@ -212,17 +156,24 @@ void Application::CheckPlayerWin()
 		alignArray[2] == 2 && alignArray[4] == 2 && alignArray[6] == 2
 		)
 	{
-		if (currentPlayer == 1 && playerTurn == 1 ||
-			currentPlayer == 2 && playerTurn == 0)
+		if (currentPlayer == 1)
 		{
 			// always last to spawn
 			GO = Spawn(Vector2(420.0f, 50.0f), 0.0f, Vector2(3.0f, 0.5f));
-			GO->GetSprite().SetFilePath("../media/YouLose.bmp");
+			GO->SetSprite(spr_youLose);
 			GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
 
 			std::cout << "YOU LOSE!" << std::endl;
 		}
+		else if (currentPlayer == 2)
+		{
+			// always last to spawn
+			GO = Spawn(Vector2(420.0f, 50.0f), 0.0f, Vector2(3.0f, 0.5f));
+			GO->SetSprite(spr_youWin);
+			GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
 
+			std::cout << "YOU WIN!" << std::endl;
+		}
 		SetGameState(STATE_GAMEOVER);
 	}
 	else if (
@@ -240,7 +191,7 @@ void Application::CheckPlayerWin()
 		)
 	{
 		GO = Spawn(Vector2(420.0f, 50.0f), 0.0f, Vector2(3.0f, 0.5f));
-		GO->GetSprite().SetFilePath("../media/GameDraw.bmp");
+		GO->SetSprite(spr_gameDraw);
 		GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
 
 		std::cout << "Game Draw!" << std::endl;
@@ -256,62 +207,105 @@ void Application::SpawnGrid()
 		{
 			// 0 ~ 8
 			GO = Spawn(Vector2(300.0f + (j * offset), 400.0f + (i * -offset)), 0.0f, Vector2(1.0f, 1.0f));
-			GO->GetSprite().SetFilePath("../media/Box.bmp");
+			GO->SetSprite(spr_boxSprite);
 			GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
 		}
 	}
 	// 9
 	GO = Spawn(Vector2(60.0f, 550.0f), 0.0f, Vector2(1.0f, 1.0f));
-	GO->GetSprite().SetFilePath("../media/TicTacToeTitle.bmp");
+	GO->SetSprite(spr_title);
 	GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
 }
 
-void Application::UpdatePlayerTurn()
+void Application::UpdateTurn()
+{
+	CheckPlayerWin();
+
+	++playerTurn;
+	if (playerTurn % 2 == 0)
+	{
+		playerTurn = 0;
+	}
+
+	CheckPlayerWin();
+
+	if (GetGameState() == STATE_STARTGAME)
+	{
+		UpdateTurnSprite();
+	}
+
+	std::cout << "PLAYERTURN : " << playerTurn << std::endl;
+}
+
+void Application::UpdateTurnSprite()
 {
 	if (currentPlayer == 1 && playerTurn == 0 ||
 		currentPlayer == 2 && playerTurn == 1)
 	{
 		// 10, will change between sprites!
-		FindGameObject(10).GetSprite().SetFilePath("../media/YourTurn.bmp");
+		FindGameObject(10).SetSprite(spr_yourTurn);
 		GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
 	}
-	else if (currentPlayer == 1 && playerTurn == 1 ||
-			currentPlayer == 2 && playerTurn == 0)
+	else if (currentPlayer == 2 && playerTurn == 0 ||
+			currentPlayer == 1 && playerTurn == 1)
 	{
 		// 10, will change between sprites!
-		FindGameObject(10).GetSprite().SetFilePath("../media/OtherTurn.bmp");
+		FindGameObject(10).SetSprite(spr_otherTurn);
 		GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
 	}
 	else if (GetGameState() == STATE_WAITGAME)
 	{
 		// 10, will change between sprites!
-		FindGameObject(10).GetSprite().SetFilePath("../media/OtherTurn.bmp");
+		FindGameObject(10).SetSprite(spr_pleaseWait);
 	}
-}
-
-void Application::PackData()
-{
-	//for (int i = 0; i < 9; ++i)
-	//{
-
-	//	//unsigned int value = packer->Extract(32);
-
-	//	//std::cout << "Extract Value " << value << std::endl;
-	//}
-
-	packer->Pack(alignArray[1], 32);
-
-	std::cout << "Pack Value " << packer->GetData() << std::endl;
-
-	unsigned int value = packer->Extract(32);
-
-	std::cout << "Extract Value " << value << std::endl;
 }
 
 void Application::SetCurrentPlayer(int player)
 {
-	currentPlayer = player;
-	std::cout << currentPlayer << std::endl;
+	if (currentPlayer == 0)
+	{
+		currentPlayer = player;
+		std::cout << currentPlayer << std::endl;
+	}
+}
+
+void Application::UpdateBoard(int index)
+{	
+	if (currentPlayer == 1 && playerTurn == 0)
+	{
+		FindGameObject(index).SetSprite(spr_circleSprite);
+		GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
+
+		alignArray[index] = 1;
+	}
+	else if (currentPlayer == 2 && playerTurn == 0)
+	{
+		FindGameObject(index).SetSprite(spr_circleSprite);
+		GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
+
+		alignArray[index] = 1;
+	}
+
+	if (currentPlayer == 1 && playerTurn == 1)
+	{
+		FindGameObject(index).SetSprite(spr_crossSprite);
+		GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
+
+		alignArray[index] = 2;
+	}
+	else if (currentPlayer == 2 && playerTurn == 1)
+	{
+		FindGameObject(index).SetSprite(spr_crossSprite);
+		GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
+
+		alignArray[index] = 2;
+	}
+}
+
+void Application::ReceiveData(unsigned char data, int bitCount)
+{
+	UpdateBoard((packer->Extract(data, bitCount)) - 1);
+	UpdateTurn();
 }
 
 void Application::SetGameState(GameState state)
@@ -345,9 +339,16 @@ void Application::Start()
 	// Here is where you will determine which is the current player.
 	network->connect();
 
-	boxSprite.SetFilePath("../media/Box.bmp");
-	circleSprite.SetFilePath("../media/BoxCircle.bmp");
-	crossSprite.SetFilePath("../media/BoxCross.bmp");
+	spr_title.SetFilePath("../media/TicTacToeTitle.bmp");
+	spr_yourTurn.SetFilePath("../media/YourTurn.bmp");
+	spr_otherTurn.SetFilePath("../media/OtherTurn.bmp");
+	spr_pleaseWait.SetFilePath("../media/PleaseWait.bmp");
+	spr_youWin.SetFilePath("../media/YouWin.bmp");
+	spr_youLose.SetFilePath("../media/YouLose.bmp");
+	spr_gameDraw.SetFilePath("../media/GameDraw.bmp");
+	spr_boxSprite.SetFilePath("../media/Box.bmp");
+	spr_circleSprite.SetFilePath("../media/BoxCircle.bmp");
+	spr_crossSprite.SetFilePath("../media/BoxCross.bmp");
 
 	SpawnGrid();
 
@@ -356,7 +357,7 @@ void Application::Start()
 
 	SetGameState(STATE_WAITGAME);
 
-	UpdatePlayerTurn();
+	UpdateTurnSprite();
 }
 
 void Application::Update(float deltaTime)

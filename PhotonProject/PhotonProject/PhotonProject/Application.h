@@ -28,24 +28,29 @@ private:
 	float halfBoxSize = 50.0f;
 	float offset = 120.0f;
 
-	int currentPlayer; // Set this based on who created the room.
+	int currentPlayer = 0; // Set this based on who created the room.
 	int playerTurn = 0;
 	int alignArray[9];
-	bool isMark = false;
 
 public:
 	~Application();
 
 	GameObject* GO;
 
-	Sprite boxSprite;
-	Sprite circleSprite;
-	Sprite crossSprite;
+	Sprite spr_title;
+	Sprite spr_yourTurn;
+	Sprite spr_otherTurn;
+	Sprite spr_pleaseWait;
+	Sprite spr_youWin;
+	Sprite spr_youLose;
+	Sprite spr_gameDraw;
+	Sprite spr_boxSprite;
+	Sprite spr_circleSprite;
+	Sprite spr_crossSprite;
 
 	MyPhoton* network;
 	UCharPacker* packer = new UCharPacker;
 
-	void SetMousePos(float x, float y);
 
 	// overload spawn gameobject function
 	GameObject* Spawn();
@@ -59,12 +64,15 @@ public:
 	// Then you need to get the mouse coordinates and box coordinates.
 	// Check for the current player turn, then change the box to either 
 	// a cross or circle depending on player turn.
+	void SetMousePos(float x, float y);
 	void CheckClickBoxPosition();
 	void CheckPlayerWin();
 	void SpawnGrid();
-	void UpdatePlayerTurn();
-	void PackData();
+	void UpdateTurn();
+	void UpdateTurnSprite();
 	void SetCurrentPlayer(int player);
+	void UpdateBoard(int index);
+	void ReceiveData(unsigned char data, int bitCount);
 
 	void SetGameState(GameState state);
 	GameState GetGameState();
