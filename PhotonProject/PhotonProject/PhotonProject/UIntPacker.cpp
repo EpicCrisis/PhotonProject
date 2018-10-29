@@ -2,17 +2,17 @@
 #include "UIntPacker.h"
 #include <iostream>
 
-UIntPacker::UIntPacker()
+UCharPacker::UCharPacker()
 {
 	m_data = 0;
 	m_bitCount = 0;
 }
 
-UIntPacker::~UIntPacker()
+UCharPacker::~UCharPacker()
 {
 }
 
-bool UIntPacker::Pack(unsigned int value, unsigned int bitCount)
+bool UCharPacker::Pack(unsigned char value, unsigned int bitCount)
 {
 	// Shift it to the left (forward) because bits are counted from the right by computer.
 	m_data = m_data << bitCount;
@@ -22,7 +22,7 @@ bool UIntPacker::Pack(unsigned int value, unsigned int bitCount)
 	return m_data;
 }
 
-unsigned int UIntPacker::Extract(unsigned int bitCount)
+unsigned int UCharPacker::Extract(unsigned int bitCount)
 {
 	unsigned int value;
 	// Reversing the shift count to get the values.
@@ -33,7 +33,7 @@ unsigned int UIntPacker::Extract(unsigned int bitCount)
 	return value;
 }
 
-unsigned int UIntPacker::GetData()
+unsigned int UCharPacker::GetData()
 {
 	return m_data;
 }

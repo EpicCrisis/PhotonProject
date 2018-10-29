@@ -7,6 +7,13 @@
 #include "GameObjectContainer.h"
 #include "UIntPacker.h"
 
+enum GameState
+{
+	STATE_WAITGAME = 0,
+	STATE_STARTGAME = 1,
+	STATE_GAMEOVER
+};
+
 class Application
 {
 private:
@@ -15,7 +22,8 @@ private:
 	GameObjectContainer<GameObject> m_GOs;
 	std::list<GameObject*>::iterator iteGO;
 
-	Vector2 boxCoords[9];
+	GameState m_gameState;
+
 	float mousePos[2];
 	float halfBoxSize = 50.0f;
 	float offset = 120.0f;
@@ -23,9 +31,7 @@ private:
 	int currentPlayer; // Set this based on who created the room.
 	int playerTurn = 0;
 	int alignArray[9];
-	bool markArray[9];
 	bool isMark = false;
-	bool isGameOver = false;
 
 public:
 	~Application();
@@ -37,10 +43,9 @@ public:
 	Sprite crossSprite;
 
 	MyPhoton* network;
-	UIntPacker* packer = new UIntPacker;
+	UCharPacker* packer = new UCharPacker;
 
 	void SetMousePos(float x, float y);
-	bool GetGameOverState() { return isGameOver; };
 
 	// overload spawn gameobject function
 	GameObject* Spawn();
@@ -59,6 +64,10 @@ public:
 	void SpawnGrid();
 	void UpdatePlayerTurn();
 	void PackData();
+	void SetCurrentPlayer(int player);
+
+	void SetGameState(GameState state);
+	GameState GetGameState();
 
 	// create singleton
 	static Application& Instance();

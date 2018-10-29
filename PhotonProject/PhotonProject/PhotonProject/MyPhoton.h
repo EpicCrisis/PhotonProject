@@ -17,8 +17,6 @@ public:
 	void sendEvent(void);
 	void sendEvent(float myID, float x, float y);
 
-	bool isFirst;
-	int currentPlayer;
 	float cursorPos[2];
 
 private:

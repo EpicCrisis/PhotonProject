@@ -101,16 +101,12 @@ void MyPhoton::joinRoomEventAction(int playerNr, const ExitGames::Common::JVecto
 {
 	std::wcout << "joinRoomEventAction" << std::endl;
 	//sendEvent();
-	// No work.
-	if (isFirst)
+	
+	Application::Instance().SetCurrentPlayer(playerNr);
+
+	if (playernrs.getSize() >= 2)
 	{
-		currentPlayer = 1;
-		std::cout << "YOU ARE FIRST" << std::endl;
-	}
-	else
-	{
-		currentPlayer = 2;
-		std::cout << "YOU ARE NOT FIRST" << std::endl;
+		Application::Instance().SetGameState(STATE_STARTGAME);
 	}
 }
 
@@ -163,9 +159,6 @@ void MyPhoton::createRoomReturn(int localPlayerNr, const ExitGames::Common::Hash
 	/*playerProperties*/, int errorCode, const ExitGames::Common::JString& errorString)
 {
 	std::wcout << "createRoomReturn" << std::endl;
-
-	// No work.
-	isFirst = true;
 }
 
 void MyPhoton::joinOrCreateRoomReturn(int localPlayerNr, const ExitGames::Common::Hashtable&
