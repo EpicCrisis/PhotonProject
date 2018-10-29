@@ -6,6 +6,7 @@
 #include "GameObject.h"
 #include "GameObjectContainer.h"
 #include "UIntPacker.h"
+#include "Vector3.h"
 
 enum GameState
 {
@@ -22,30 +23,31 @@ private:
 	GameObjectContainer<GameObject> m_GOs;
 	std::list<GameObject*>::iterator iteGO;
 
+	GameObject* GO;
+
+	Sprite* spr_Title;
+	Sprite* spr_Connecting;
+	Sprite* spr_Connected;
+	Sprite* spr_Empty;
+	Sprite* spr_YourTurn;
+	Sprite* spr_OtherTurn;
+	Sprite* spr_BoxEmpty;
+	Sprite* spr_BoxCircle;
+	Sprite* spr_BoxCross;
+
 	GameState m_gameState;
 
-	float mousePos[2];
-	float halfBoxSize = 50.0f;
-	float offset = 120.0f;
+	Vector2 box_drawPoint;
 
-	int currentPlayer; // Set this based on who created the room.
-	int playerTurn = 0;
-	int alignArray[9];
-	bool isMark = false;
+	float box_width;
+
+	int m_ID;
 
 public:
 	~Application();
 
-	GameObject* GO;
-
-	Sprite boxSprite;
-	Sprite circleSprite;
-	Sprite crossSprite;
-
 	MyPhoton* network;
 	UCharPacker* packer = new UCharPacker;
-
-	void SetMousePos(float x, float y);
 
 	// overload spawn gameobject function
 	GameObject* Spawn();
@@ -54,20 +56,16 @@ public:
 	GameObject* Spawn(Vector2 position, float rotation, Vector2 scale);
 	GameObject& FindGameObject(int index);
 	void Destroy(GameObject* gameObject);
-
-	// First is to detect player left mouse click.
-	// Then you need to get the mouse coordinates and box coordinates.
-	// Check for the current player turn, then change the box to either 
-	// a cross or circle depending on player turn.
-	void CheckClickBoxPosition();
-	void CheckPlayerWin();
-	void SpawnGrid();
-	void UpdatePlayerTurn();
-	void PackData();
-	void SetCurrentPlayer(int player);
+	
+	void SetID(int ID);
+	int GetID();
 
 	void SetGameState(GameState state);
-	GameState GetGameState();
+	GameState& GetGameState();
+
+	void InitializeBoard();
+	void UpdateBoard(int index, bool isOrange);
+	int GetIndex(Vector3 mousePos);
 
 	// create singleton
 	static Application& Instance();
