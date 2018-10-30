@@ -59,7 +59,7 @@ void Application::SetMousePos(float x, float y)
 	mousePos[1] = y;
 }
 
-void Application::CheckClickBoxPosition()
+void Application::OnMouseClickBox()
 {
 	// Check position, check player turn, check have marked, check array align, check win.
 	for (int i = 0; i < 3; ++i)
@@ -83,8 +83,8 @@ void Application::CheckClickBoxPosition()
 						std::cout << k << std::endl;
 						//std::cout << packer->Pack(boardIndex, 4) << std::endl;
 
-						UpdateBoard(k);
-						UpdateTurn();
+						UpdateBoardData(k);
+						UpdatePlayerTurn();
 					}
 				}
 				else if (playerTurn == 1 && currentPlayer == 2)
@@ -97,8 +97,8 @@ void Application::CheckClickBoxPosition()
 						std::cout << k << std::endl;
 						//std::cout << packer->Pack(boardIndex, 4) << std::endl;
 
-						UpdateBoard(k);
-						UpdateTurn();
+						UpdateBoardData(k);
+						UpdatePlayerTurn();
 					}
 				}
 			}
@@ -158,7 +158,7 @@ void Application::CheckPlayerWin()
 	{
 		if (currentPlayer == 1)
 		{
-			// always last to spawn
+			// 11, always last to spawn
 			GO = Spawn(Vector2(420.0f, 50.0f), 0.0f, Vector2(3.0f, 0.5f));
 			GO->SetSprite(spr_youLose);
 			GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
@@ -167,7 +167,7 @@ void Application::CheckPlayerWin()
 		}
 		else if (currentPlayer == 2)
 		{
-			// always last to spawn
+			// 11, always last to spawn
 			GO = Spawn(Vector2(420.0f, 50.0f), 0.0f, Vector2(3.0f, 0.5f));
 			GO->SetSprite(spr_youWin);
 			GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
@@ -190,6 +190,7 @@ void Application::CheckPlayerWin()
 		alignArray[2] != 0 && alignArray[4] != 0 && alignArray[6] != 0
 		)
 	{
+		// 11, always last to spawn
 		GO = Spawn(Vector2(420.0f, 50.0f), 0.0f, Vector2(3.0f, 0.5f));
 		GO->SetSprite(spr_gameDraw);
 		GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
@@ -199,7 +200,7 @@ void Application::CheckPlayerWin()
 	}
 }
 
-void Application::SpawnGrid()
+void Application::CreateBoard()
 {
 	for (int i = 0; i < 3; ++i)
 	{
@@ -217,7 +218,7 @@ void Application::SpawnGrid()
 	GO->GetSprite().SetBlendingMode(BLEND_ADDITIVE);
 }
 
-void Application::UpdateTurn()
+void Application::UpdatePlayerTurn()
 {
 	CheckPlayerWin();
 
@@ -231,13 +232,13 @@ void Application::UpdateTurn()
 
 	if (GetGameState() == STATE_STARTGAME)
 	{
-		UpdateTurnSprite();
+		UpdateBoardSprite();
 	}
 
 	std::cout << "PLAYERTURN : " << playerTurn << std::endl;
 }
 
-void Application::UpdateTurnSprite()
+void Application::UpdateBoardSprite()
 {
 	if (currentPlayer == 1 && playerTurn == 0 ||
 		currentPlayer == 2 && playerTurn == 1)
@@ -269,7 +270,7 @@ void Application::SetCurrentPlayer(int player)
 	}
 }
 
-void Application::UpdateBoard(int index)
+void Application::UpdateBoardData(int index)
 {	
 	if (currentPlayer == 1 && playerTurn == 0)
 	{
@@ -302,10 +303,22 @@ void Application::UpdateBoard(int index)
 	}
 }
 
+void Application::ResetGame()
+{
+	for (int i = 0; i < 9; ++i)
+	{
+		FindGameObject(i).SetSprite(spr_boxSprite);
+		alignArray[i] = 0;
+	}
+	playerTurn = 0;
+	UpdateBoardSprite();
+	SetGameState(STATE_STARTGAME);
+}
+
 void Application::ReceiveData(unsigned char data, int bitCount)
 {
-	UpdateBoard((packer->Extract(data, bitCount)) - 1);
-	UpdateTurn();
+	UpdateBoardData((packer->Extract(data, bitCount)) - 1);
+	UpdatePlayerTurn();
 }
 
 void Application::SetGameState(GameState state)
@@ -350,14 +363,14 @@ void Application::Start()
 	spr_circleSprite.SetFilePath("../media/BoxCircle.bmp");
 	spr_crossSprite.SetFilePath("../media/BoxCross.bmp");
 
-	SpawnGrid();
+	CreateBoard();
 
 	// 10, spawn game object to show player turn
 	GO = Spawn(Vector2(420.0f, 500.0f), 0.0f, Vector2(3.0f, 0.35f));
 
 	SetGameState(STATE_WAITGAME);
 
-	UpdateTurnSprite();
+	UpdateBoardSprite();
 }
 
 void Application::Update(float deltaTime)

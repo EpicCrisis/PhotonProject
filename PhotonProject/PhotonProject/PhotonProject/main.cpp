@@ -78,7 +78,7 @@ void OnLeftMouseButton(GLFWwindow* window, int button, int action, int mods)
 
 			if (Application::Instance().GetGameState() == STATE_STARTGAME)
 			{
-				Application::Instance().CheckClickBoxPosition();
+				Application::Instance().OnMouseClickBox();
 			}
 		}
 	}

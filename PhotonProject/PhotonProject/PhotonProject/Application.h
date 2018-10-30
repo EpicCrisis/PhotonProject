@@ -47,6 +47,7 @@ public:
 	Sprite spr_boxSprite;
 	Sprite spr_circleSprite;
 	Sprite spr_crossSprite;
+	Sprite spr_resetSprite;
 
 	MyPhoton* network;
 	UCharPacker* packer = new UCharPacker;
@@ -65,14 +66,19 @@ public:
 	// Check for the current player turn, then change the box to either 
 	// a cross or circle depending on player turn.
 	void SetMousePos(float x, float y);
-	void CheckClickBoxPosition();
-	void CheckPlayerWin();
-	void SpawnGrid();
-	void UpdateTurn();
-	void UpdateTurnSprite();
-	void SetCurrentPlayer(int player);
-	void UpdateBoard(int index);
+
+	void OnMouseClickBox();
 	void ReceiveData(unsigned char data, int bitCount);
+
+	void SetCurrentPlayer(int player);
+	void CheckPlayerWin();
+	void UpdatePlayerTurn();
+
+	void CreateBoard();
+	void UpdateBoardData(int index);
+	void UpdateBoardSprite();
+
+	void ResetGame();
 
 	void SetGameState(GameState state);
 	GameState GetGameState();

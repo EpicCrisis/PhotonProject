@@ -116,7 +116,7 @@ void MyPhoton::joinRoomEventAction(int playerNr, const ExitGames::Common::JVecto
 	if (playernrs.getSize() >= 2)
 	{
 		Application::Instance().SetGameState(STATE_STARTGAME);
-		Application::Instance().UpdateTurnSprite();
+		Application::Instance().UpdateBoardSprite();
 	}
 }
 
@@ -138,7 +138,8 @@ void MyPhoton::customEventAction(int playerNr, nByte eventCode, const ExitGames:
 	}
 	else
 	{
-		std::cout << "invalid data" << std::endl;
+		std::cout << "Invalid Data" << std::endl;
+		return;
 	}
 }
 
