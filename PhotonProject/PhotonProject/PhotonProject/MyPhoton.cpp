@@ -130,7 +130,6 @@ void MyPhoton::customEventAction(int playerNr, nByte eventCode, const ExitGames:
 	// you do not receive your own events, unless you specify yourself as one of the receivers explicitly, 
 	// so you must start 2 clients, to receive the events, which you have sent, as sendEvent() uses the default 
 	// receivers of opRaiseEvent() (all players in same room like the sender, except the sender itself)
-	//float* data = ExitGames::Common::ValueObject<float*>(eventContent).getDataCopy();
 	unsigned char data = ExitGames::Common::ValueObject<unsigned char>(eventContent).getDataCopy();
 	if (data)
 	{
@@ -141,6 +140,8 @@ void MyPhoton::customEventAction(int playerNr, nByte eventCode, const ExitGames:
 		std::cout << "Invalid Data" << std::endl;
 		return;
 	}
+
+	//float* data = ExitGames::Common::ValueObject<float*>(eventContent).getDataCopy();
 }
 
 void MyPhoton::connectReturn(int errorCode, const ExitGames::Common::JString& errorString, const ExitGames::Common::JString& cluster)
